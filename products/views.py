@@ -5,13 +5,23 @@ from django.views import View
 
 from products.models import Owner, Dog
 
-class ProductsView(View):
+class ownersView(View):
     def post(self, request):
         data     = json.loads(request.body)
-        owner     = Owner.objects.create(name=data['owner'])
-        dog = Dog.objects.create(
+        Owner.objects.create(
+            name=data['owner'],
+            emali=data['email'],
+            age=data['age'])
+        
+        return JsonResponse({'messasge':'created'}, status=201)
+   
+class dogsViw(View):
+    def post(self,request):
+        data = json.loads(request.body)
+        Dog.objects.create(
             name = data['dog'],
-            owner = owner
+            age=data['age'],
+            owner = Owner.objects.get(name=data['owner'])
         )
         
         return JsonResponse({'messasge':'created'}, status=201)
